@@ -1,8 +1,8 @@
-package com.example.hospital_db_backend.config;
+package com.testing_exam_webapp.config;
 
-import com.example.hospital_db_backend.model.mysql.User;
-import com.example.hospital_db_backend.model.types.Role;
-import com.example.hospital_db_backend.repository.UserRepository;
+import com.testing_exam_webapp.model.mysql.User;
+import com.testing_exam_webapp.model.types.Role;
+import com.testing_exam_webapp.repository.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;

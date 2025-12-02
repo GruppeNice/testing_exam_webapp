@@ -1,4 +1,4 @@
-package com.example.hospital_db_backend.config;
+package com.testing_exam_webapp.config;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

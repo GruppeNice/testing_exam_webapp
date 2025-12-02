@@ -1,15 +1,15 @@
-package com.example.hospital_db_backend.service;
+package com.testing_exam_webapp.service;
 
-import com.example.hospital_db_backend.dto.PrescriptionRequest;
-import com.example.hospital_db_backend.model.mysql.Doctor;
-import com.example.hospital_db_backend.model.mysql.Medication;
-import com.example.hospital_db_backend.model.mysql.Patient;
-import com.example.hospital_db_backend.model.mysql.Prescription;
-import com.example.hospital_db_backend.exception.EntityNotFoundException;
-import com.example.hospital_db_backend.repository.DoctorRepository;
-import com.example.hospital_db_backend.repository.MedicationRepository;
-import com.example.hospital_db_backend.repository.PatientRepository;
-import com.example.hospital_db_backend.repository.PrescriptionRepository;
+import com.testing_exam_webapp.dto.PrescriptionRequest;
+import com.testing_exam_webapp.exception.EntityNotFoundException;
+import com.testing_exam_webapp.model.mysql.Doctor;
+import com.testing_exam_webapp.model.mysql.Medication;
+import com.testing_exam_webapp.model.mysql.Patient;
+import com.testing_exam_webapp.model.mysql.Prescription;
+import com.testing_exam_webapp.repository.DoctorRepository;
+import com.testing_exam_webapp.repository.MedicationRepository;
+import com.testing_exam_webapp.repository.PatientRepository;
+import com.testing_exam_webapp.repository.PrescriptionRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

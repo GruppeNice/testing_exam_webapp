@@ -1,4 +1,4 @@
-package com.testing_exam_webapp.types;
+package com.testing_exam_webapp.model.types;
 
 public enum Role {
     USER,

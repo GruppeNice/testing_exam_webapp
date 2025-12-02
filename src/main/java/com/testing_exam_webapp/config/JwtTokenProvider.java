@@ -1,4 +1,4 @@
-package com.example.hospital_db_backend.config;
+package com.testing_exam_webapp.config;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

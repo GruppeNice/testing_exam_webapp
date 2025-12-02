@@ -1,14 +1,14 @@
-package com.example.hospital_db_backend.service;
+package com.testing_exam_webapp.service;
 
-import com.example.hospital_db_backend.config.JwtTokenProvider;
-import com.example.hospital_db_backend.dto.LoginRequest;
-import com.example.hospital_db_backend.dto.LoginResponse;
-import com.example.hospital_db_backend.dto.RegisterRequest;
-import com.example.hospital_db_backend.model.mysql.User;
-import com.example.hospital_db_backend.model.types.Role;
-import com.example.hospital_db_backend.exception.UnauthorizedException;
-import com.example.hospital_db_backend.exception.ValidationException;
-import com.example.hospital_db_backend.repository.UserRepository;
+import com.testing_exam_webapp.config.JwtTokenProvider;
+import com.testing_exam_webapp.dto.LoginRequest;
+import com.testing_exam_webapp.dto.LoginResponse;
+import com.testing_exam_webapp.dto.RegisterRequest;
+import com.testing_exam_webapp.exception.UnauthorizedException;
+import com.testing_exam_webapp.exception.ValidationException;
+import com.testing_exam_webapp.model.mysql.User;
+import com.testing_exam_webapp.model.types.Role;
+import com.testing_exam_webapp.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 

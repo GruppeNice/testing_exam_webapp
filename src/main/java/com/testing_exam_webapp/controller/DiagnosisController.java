@@ -1,8 +1,8 @@
-package com.example.hospital_db_backend.controller;
+package com.testing_exam_webapp.controller;
 
-import com.example.hospital_db_backend.dto.DiagnosisRequest;
-import com.example.hospital_db_backend.model.mysql.Diagnosis;
-import com.example.hospital_db_backend.service.DiagnosisService;
+import com.testing_exam_webapp.dto.DiagnosisRequest;
+import com.testing_exam_webapp.model.mysql.Diagnosis;
+import com.testing_exam_webapp.service.DiagnosisService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

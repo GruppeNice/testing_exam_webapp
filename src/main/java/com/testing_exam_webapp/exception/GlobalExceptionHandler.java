@@ -1,4 +1,4 @@
-package com.example.hospital_db_backend.exception;
+package com.testing_exam_webapp.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

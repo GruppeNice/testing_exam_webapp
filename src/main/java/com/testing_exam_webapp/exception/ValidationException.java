@@ -1,4 +1,4 @@
-package com.example.hospital_db_backend.exception;
+package com.testing_exam_webapp.exception;
 
 public class ValidationException extends RuntimeException {
     public ValidationException(String message) {

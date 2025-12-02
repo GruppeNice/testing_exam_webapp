@@ -1,8 +1,8 @@
-package com.example.hospital_db_backend.controller;
+package com.testing_exam_webapp.controller;
 
-import com.example.hospital_db_backend.dto.PrescriptionRequest;
-import com.example.hospital_db_backend.model.mysql.Prescription;
-import com.example.hospital_db_backend.service.PrescriptionService;
+import com.testing_exam_webapp.dto.PrescriptionRequest;
+import com.testing_exam_webapp.model.mysql.Prescription;
+import com.testing_exam_webapp.service.PrescriptionService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

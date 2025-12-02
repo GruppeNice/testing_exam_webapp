@@ -1,6 +1,6 @@
-package com.example.hospital_db_backend.dto;
+package com.testing_exam_webapp.dto;
 
-import com.example.hospital_db_backend.model.types.DoctorSpecialityType;
+import com.testing_exam_webapp.model.types.DoctorSpecialityType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;

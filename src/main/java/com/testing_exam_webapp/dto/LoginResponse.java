@@ -1,4 +1,4 @@
-package com.example.hospital_db_backend.dto;
+package com.testing_exam_webapp.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

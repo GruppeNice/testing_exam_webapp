@@ -1,6 +1,6 @@
-package com.example.hospital_db_backend.repository;
+package com.testing_exam_webapp.repository;
 
-import com.example.hospital_db_backend.model.mysql.Nurse;
+import com.testing_exam_webapp.model.mysql.Nurse;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.UUID;

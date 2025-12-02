@@ -1,4 +1,4 @@
-package com.testing_exam_webapp.mysql;
+package com.testing_exam_webapp.model.mysql;
 
 import com.testing_exam_webapp.model.types.Role;
 import jakarta.persistence.*;

@@ -1,4 +1,4 @@
-package com.example.hospital_db_backend.config;
+package com.testing_exam_webapp.config;
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;

@@ -1,10 +1,10 @@
-package com.example.hospital_db_backend.controller;
+package com.testing_exam_webapp.controller;
 
-import com.example.hospital_db_backend.dto.LoginRequest;
-import com.example.hospital_db_backend.dto.LoginResponse;
-import com.example.hospital_db_backend.dto.RegisterRequest;
-import com.example.hospital_db_backend.model.mysql.User;
-import com.example.hospital_db_backend.service.AuthService;
+import com.testing_exam_webapp.dto.LoginRequest;
+import com.testing_exam_webapp.dto.LoginResponse;
+import com.testing_exam_webapp.dto.RegisterRequest;
+import com.testing_exam_webapp.model.mysql.User;
+import com.testing_exam_webapp.service.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

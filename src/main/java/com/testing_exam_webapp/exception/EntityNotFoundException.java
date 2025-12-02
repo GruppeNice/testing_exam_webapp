@@ -1,4 +1,4 @@
-package com.example.hospital_db_backend.exception;
+package com.testing_exam_webapp.exception;
 
 public class EntityNotFoundException extends RuntimeException {
     public EntityNotFoundException(String message) {

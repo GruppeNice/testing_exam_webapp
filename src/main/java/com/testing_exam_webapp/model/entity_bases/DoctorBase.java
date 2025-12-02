@@ -1,4 +1,4 @@
-package com.testing_exam_webapp.entity_bases;
+package com.testing_exam_webapp.model.entity_bases;
 
 import com.testing_exam_webapp.model.types.DoctorSpecialityType;
 import jakarta.persistence.EnumType;

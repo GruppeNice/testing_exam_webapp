@@ -43,7 +43,7 @@ jobs:
           restore-keys: ${{ runner.os }}-gradle
 
       - name: Build with Gradle Wrapper
-        run: ./gradlew build sonar --info
+        run: ./gradlew build sonarqube --info
 
       - name: Upload Gradle problems report
         if: failure()

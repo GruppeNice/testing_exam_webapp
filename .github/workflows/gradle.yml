@@ -43,7 +43,9 @@ jobs:
           restore-keys: ${{ runner.os }}-gradle
 
       - name: Build with Gradle Wrapper
-        run: ./gradlew build sonarqube --info
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: ./gradlew build sonar --info
 
       - name: Upload Gradle problems report
         if: failure()

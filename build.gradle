@@ -25,14 +25,6 @@ repositories {
     mavenCentral()
 }
 
-test {
-    testLogging {
-        events "passed", "skipped", "failed"
-        exceptionFormat "short"
-        showStandardStreams = true
-    }
-}
-
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
@@ -57,10 +49,6 @@ jacoco {
     toolVersion = "0.8.11"
 }
 
-tasks.named('test') {
-    finalizedBy jacocoTestReport
-}
-
 jacocoTestReport {
     dependsOn test
     reports {
@@ -72,9 +60,14 @@ jacocoTestReport {
 
 tasks.named('test') {
     useJUnitPlatform()
+    finalizedBy jacocoTestReport
+
     testLogging {
         events "passed", "skipped", "failed"
         exceptionFormat "full"
-        showStandardStreams = true
+        showExceptions true
+        showCauses true
+        showStackTraces true
+        showStandardStreams true
     }
 }

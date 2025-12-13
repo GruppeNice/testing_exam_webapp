@@ -30,7 +30,7 @@ jobs:
         run: chmod +x ./gradlew
 
       - name: Build with Gradle Wrapper
-        run: ./gradlew build --no-daemon --stacktrace --info --console=plain
+        run: ./gradlew build --no-daemon --stacktrace --info --console=plain --warning-mode all
 
       - name: Upload test reports
         if: failure()

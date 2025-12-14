@@ -19,37 +19,37 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtTokenProvider tokenProvider;
 
-    public JwtAuthenticationFilter(JwtTokenProvider tokenProvider) {
+    public JwtAuthenticationFilter(final JwtTokenProvider tokenProvider) {
         this.tokenProvider = tokenProvider;
     }
 
     @Override
-    protected void doFilterInternal(@org.springframework.lang.NonNull HttpServletRequest request, 
-                                    @org.springframework.lang.NonNull HttpServletResponse response, 
-                                    @org.springframework.lang.NonNull FilterChain filterChain)
+    protected void doFilterInternal(@org.springframework.lang.NonNull final HttpServletRequest request, 
+                                    @org.springframework.lang.NonNull final HttpServletResponse response, 
+                                    @org.springframework.lang.NonNull final FilterChain filterChain)
             throws ServletException, IOException {
         try {
-            String jwt = getJwtFromRequest(request);
+            final String jwt = getJwtFromRequest(request);
 
             if (jwt != null && tokenProvider.validateToken(jwt, tokenProvider.getUsernameFromToken(jwt))) {
-                String username = tokenProvider.getUsernameFromToken(jwt);
-                String role = tokenProvider.getRoleFromToken(jwt);
+                final String username = tokenProvider.getUsernameFromToken(jwt);
+                final String role = tokenProvider.getRoleFromToken(jwt);
 
-                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                final UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                         username, null, Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + role)));
 
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
-        } catch (Exception ex) {
+        } catch (io.jsonwebtoken.JwtException | IllegalArgumentException ex) {
             logger.error("Could not set user authentication in security context", ex);
         }
 
         filterChain.doFilter(request, response);
     }
 
-    private String getJwtFromRequest(HttpServletRequest request) {
-        String bearerToken = request.getHeader("Authorization");
+    private String getJwtFromRequest(final HttpServletRequest request) {
+        final String bearerToken = request.getHeader("Authorization");
         if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring(7);
         }

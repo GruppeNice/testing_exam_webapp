@@ -30,6 +30,11 @@ public class TimeService {
                 : timezone.trim();
 
         try {
+            // Check if API URL is configured
+            if (apiUrl == null || apiUrl.trim().isEmpty()) {
+                return createDefaultTime();
+            }
+            
             String url = String.format("%s/timezone/%s", apiUrl, timezoneToUse);
             @SuppressWarnings("rawtypes")
             ResponseEntity<Map> response = restTemplate.getForEntity(url, Map.class);
@@ -39,8 +44,8 @@ public class TimeService {
             } else {
                 return createDefaultTime();
             }
-        } catch (Exception e) {
-            // On any error, return default time
+        } catch (IllegalArgumentException | org.springframework.web.client.RestClientException e) {
+            // URL formatting errors or RestTemplate errors (network issues, etc.) - return default time
             return createDefaultTime();
         }
     }

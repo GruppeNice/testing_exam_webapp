@@ -513,6 +513,158 @@ class PatientServiceTest {
         assertTrue(exception.getMessage().contains("does not belong to the selected hospital"));
     }
 
+    @Test
+    @DisplayName("updatePatient - Should update patient with null diagnosisIds - Clears diagnoses")
+    void updatePatient_NullDiagnosisIds_ClearsDiagnoses() {
+        // Arrange
+        UUID patientId = testPatient.getPatientId();
+        testPatient.setDiagnosis(Set.of(testDiagnosis));
+        PatientRequest request = new PatientRequest();
+        request.setPatientName("Updated Name");
+        request.setDateOfBirth(LocalDate.of(1990, 5, 15));
+        request.setDiagnosisIds(null);
+
+        when(patientRepository.findById(patientId)).thenReturn(Optional.of(testPatient));
+        when(patientRepository.save(any(Patient.class))).thenReturn(testPatient);
+
+        // Act
+        Patient result = patientService.updatePatient(patientId, request);
+
+        // Assert
+        assertNotNull(result);
+        verify(diagnosisRepository, never()).findById(any());
+    }
+
+    @Test
+    @DisplayName("updatePatient - Should update patient with null wardId - Clears ward")
+    void updatePatient_NullWardId_ClearsWard() {
+        // Arrange
+        UUID patientId = testPatient.getPatientId();
+        testPatient.setWard(testWard);
+        PatientRequest request = new PatientRequest();
+        request.setPatientName("Updated Name");
+        request.setDateOfBirth(LocalDate.of(1990, 5, 15));
+        request.setWardId(null);
+
+        when(patientRepository.findById(patientId)).thenReturn(Optional.of(testPatient));
+        when(patientRepository.save(any(Patient.class))).thenReturn(testPatient);
+
+        // Act
+        Patient result = patientService.updatePatient(patientId, request);
+
+        // Assert
+        assertNotNull(result);
+        verify(wardRepository, never()).findById(any());
+    }
+
+    @Test
+    @DisplayName("updatePatient - Should update patient with null hospitalId - Clears hospital")
+    void updatePatient_NullHospitalId_ClearsHospital() {
+        // Arrange
+        UUID patientId = testPatient.getPatientId();
+        testPatient.setHospital(testHospital);
+        PatientRequest request = new PatientRequest();
+        request.setPatientName("Updated Name");
+        request.setDateOfBirth(LocalDate.of(1990, 5, 15));
+        request.setHospitalId(null);
+
+        when(patientRepository.findById(patientId)).thenReturn(Optional.of(testPatient));
+        when(patientRepository.save(any(Patient.class))).thenReturn(testPatient);
+
+        // Act
+        Patient result = patientService.updatePatient(patientId, request);
+
+        // Assert
+        assertNotNull(result);
+        verify(hospitalRepository, never()).findById(any());
+    }
+
+    @Test
+    @DisplayName("updatePatient - Should update patient with ward only (no hospital)")
+    void updatePatient_WardOnly_UpdatesPatient() {
+        // Arrange
+        UUID patientId = testPatient.getPatientId();
+        PatientRequest request = new PatientRequest();
+        request.setPatientName("Updated Name");
+        request.setDateOfBirth(LocalDate.of(1990, 5, 15));
+        request.setWardId(testWard.getWardId());
+        request.setHospitalId(null);
+
+        when(patientRepository.findById(patientId)).thenReturn(Optional.of(testPatient));
+        when(wardRepository.findById(testWard.getWardId())).thenReturn(Optional.of(testWard));
+        when(patientRepository.save(any(Patient.class))).thenReturn(testPatient);
+
+        // Act
+        Patient result = patientService.updatePatient(patientId, request);
+
+        // Assert
+        assertNotNull(result);
+        verify(hospitalRepository, never()).findById(any());
+    }
+
+    @Test
+    @DisplayName("updatePatient - Should update patient with hospital only (no ward)")
+    void updatePatient_HospitalOnly_UpdatesPatient() {
+        // Arrange
+        UUID patientId = testPatient.getPatientId();
+        PatientRequest request = new PatientRequest();
+        request.setPatientName("Updated Name");
+        request.setDateOfBirth(LocalDate.of(1990, 5, 15));
+        request.setWardId(null);
+        request.setHospitalId(testHospital.getHospitalId());
+
+        when(patientRepository.findById(patientId)).thenReturn(Optional.of(testPatient));
+        when(hospitalRepository.findById(testHospital.getHospitalId())).thenReturn(Optional.of(testHospital));
+        when(patientRepository.save(any(Patient.class))).thenReturn(testPatient);
+
+        // Act
+        Patient result = patientService.updatePatient(patientId, request);
+
+        // Assert
+        assertNotNull(result);
+        verify(wardRepository, never()).findById(any());
+    }
+
+    @Test
+    @DisplayName("updatePatient - Should throw exception when ward not found")
+    void updatePatient_WardNotFound_ThrowsException() {
+        // Arrange
+        UUID patientId = testPatient.getPatientId();
+        UUID nonExistentWardId = UUID.randomUUID();
+        PatientRequest request = new PatientRequest();
+        request.setPatientName("Updated Name");
+        request.setWardId(nonExistentWardId);
+
+        when(patientRepository.findById(patientId)).thenReturn(Optional.of(testPatient));
+        when(wardRepository.findById(nonExistentWardId)).thenReturn(Optional.empty());
+
+        // Act & Assert
+        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class, () -> {
+            patientService.updatePatient(patientId, request);
+        });
+        assertEquals("Ward not found", exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("updatePatient - Should throw exception when hospital not found")
+    void updatePatient_HospitalNotFound_ThrowsException() {
+        // Arrange
+        UUID patientId = testPatient.getPatientId();
+        UUID nonExistentHospitalId = UUID.randomUUID();
+        PatientRequest request = new PatientRequest();
+        request.setPatientName("Updated Name");
+        request.setHospitalId(nonExistentHospitalId);
+
+        when(patientRepository.findById(patientId)).thenReturn(Optional.of(testPatient));
+        when(hospitalRepository.findById(nonExistentHospitalId)).thenReturn(Optional.empty());
+
+        // Act & Assert
+        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class, () -> {
+            patientService.updatePatient(patientId, request);
+        });
+        assertEquals("Hospital not found", exception.getMessage());
+    }
+
     // ==================== deletePatient() Tests ====================
 
     @Test

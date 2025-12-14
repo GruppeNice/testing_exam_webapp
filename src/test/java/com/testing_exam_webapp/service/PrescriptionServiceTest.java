@@ -8,12 +8,16 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -112,6 +116,38 @@ class PrescriptionServiceTest {
         when(prescriptionRepository.existsById(prescriptionId)).thenReturn(true);
         prescriptionService.deletePrescription(prescriptionId);
         verify(prescriptionRepository, times(1)).deleteById(prescriptionId);
+    }
+
+    static Stream<Arguments> prescriptionDateRangeValues() {
+        LocalDate today = LocalDate.now();
+        return Stream.of(
+            Arguments.of(today, today.plusDays(7), "One week prescription"),
+            Arguments.of(today, today.plusDays(14), "Two weeks prescription"),
+            Arguments.of(today, today.plusDays(30), "One month prescription"),
+            Arguments.of(today, today.plusDays(90), "Three months prescription"),
+            Arguments.of(today, today.plusDays(365), "One year prescription"),
+            Arguments.of(today, null, "No end date (ongoing)")
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("prescriptionDateRangeValues")
+    @DisplayName("createPrescription - Boundary Analysis: Prescription date range values")
+    void createPrescription_DateRangeValues_CreatesPrescription(LocalDate startDate, LocalDate endDate, String description) {
+        PrescriptionRequest request = new PrescriptionRequest();
+        request.setStartDate(startDate);
+        request.setEndDate(endDate);
+
+        when(prescriptionRepository.save(any(Prescription.class))).thenAnswer(invocation -> {
+            Prescription p = invocation.getArgument(0);
+            p.setPrescriptionId(UUID.randomUUID());
+            return p;
+        });
+
+        Prescription result = prescriptionService.createPrescription(request);
+        assertNotNull(result);
+        assertEquals(startDate, result.getStartDate());
+        assertEquals(endDate, result.getEndDate());
     }
 }
 

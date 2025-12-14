@@ -25,7 +25,7 @@ describe('ClockWidget', () => {
 
     await waitFor(() => {
       expect(screen.getByText('Current Time')).toBeInTheDocument();
-      expect(screen.getByText('Europe/Copenhagen')).toBeInTheDocument();
+      expect(screen.getByText(/Europe\/Copenhagen/)).toBeInTheDocument();
     });
   });
 
@@ -44,7 +44,7 @@ describe('ClockWidget', () => {
 
     await waitFor(() => {
       expect(timeService.getCurrentTime).toHaveBeenCalledWith('America/New_York');
-      expect(screen.getByText('America/New_York')).toBeInTheDocument();
+      expect(screen.getByText(/America\/New_York/)).toBeInTheDocument();
     });
   });
 

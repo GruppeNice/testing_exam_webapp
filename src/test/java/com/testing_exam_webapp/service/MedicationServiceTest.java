@@ -7,11 +7,15 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.*;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -97,6 +101,37 @@ class MedicationServiceTest {
         when(medicationRepository.existsById(medicationId)).thenReturn(true);
         medicationService.deleteMedication(medicationId);
         verify(medicationRepository, times(1)).deleteById(medicationId);
+    }
+
+    static Stream<Arguments> dosageFormatValues() {
+        return Stream.of(
+            Arguments.of("100mg", "Milligrams"),
+            Arguments.of("500mg", "Higher milligrams"),
+            Arguments.of("1g", "Grams"),
+            Arguments.of("2.5g", "Decimal grams"),
+            Arguments.of("10ml", "Milliliters"),
+            Arguments.of("1 tablet", "Tablet format"),
+            Arguments.of("2 capsules", "Capsule format")
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("dosageFormatValues")
+    @DisplayName("createMedication - Equivalence Partitioning: Different dosage formats")
+    void createMedication_DifferentDosageFormats_CreatesMedication(String dosage, String description) {
+        MedicationRequest request = new MedicationRequest();
+        request.setMedicationName("Test Medication");
+        request.setDosage(dosage);
+
+        when(medicationRepository.save(any(Medication.class))).thenAnswer(invocation -> {
+            Medication m = invocation.getArgument(0);
+            m.setMedicationId(UUID.randomUUID());
+            return m;
+        });
+
+        Medication result = medicationService.createMedication(request);
+        assertNotNull(result);
+        assertEquals(dosage, result.getDosage());
     }
 }
 

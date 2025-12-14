@@ -10,12 +10,16 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -120,6 +124,37 @@ class DiagnosisServiceTest {
         when(diagnosisRepository.existsById(diagnosisId)).thenReturn(true);
         diagnosisService.deleteDiagnosis(diagnosisId);
         verify(diagnosisRepository, times(1)).deleteById(diagnosisId);
+    }
+
+    static Stream<Arguments> diagnosisDateBoundaryValues() {
+        LocalDate today = LocalDate.now();
+        return Stream.of(
+            Arguments.of(today, "Today"),
+            Arguments.of(today.minusDays(1), "Yesterday"),
+            Arguments.of(today.minusDays(7), "One week ago"),
+            Arguments.of(today.minusDays(30), "One month ago"),
+            Arguments.of(today.minusDays(365), "One year ago"),
+            Arguments.of(LocalDate.of(2000, 1, 1), "Far past date")
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("diagnosisDateBoundaryValues")
+    @DisplayName("createDiagnosis - Boundary Analysis: Diagnosis date boundary values")
+    void createDiagnosis_DateBoundaryValues_CreatesDiagnosis(LocalDate diagnosisDate, String description) {
+        DiagnosisRequest request = new DiagnosisRequest();
+        request.setDiagnosisDate(diagnosisDate);
+        request.setDescription("Test diagnosis");
+
+        when(diagnosisRepository.save(any(Diagnosis.class))).thenAnswer(invocation -> {
+            Diagnosis d = invocation.getArgument(0);
+            d.setDiagnosisId(UUID.randomUUID());
+            return d;
+        });
+
+        Diagnosis result = diagnosisService.createDiagnosis(request);
+        assertNotNull(result);
+        assertEquals(diagnosisDate, result.getDiagnosisDate());
     }
 }
 

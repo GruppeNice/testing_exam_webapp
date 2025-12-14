@@ -3,6 +3,7 @@ plugins {
     id 'org.springframework.boot' version '3.3.5'
     id 'io.spring.dependency-management' version '1.1.7'
     id 'jacoco'
+    id 'pmd'
 }
 
 group = 'com.example'
@@ -41,6 +42,7 @@ dependencies {
     runtimeOnly 'com.mysql:mysql-connector-j'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'com.h2database:h2'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
@@ -68,5 +70,35 @@ tasks.named('test') {
         events "passed", "skipped", "failed"
         exceptionFormat "full"
         showStandardStreams = true
+    }
+}
+
+// PMD configuration for static code analysis
+// PMD is a static analysis tool that finds common programming flaws
+pmd {
+    toolVersion = '6.55.0'
+    ignoreFailures = true // Don't fail build - generate report for documentation
+    ruleSetFiles = files() // Use default rule sets
+    ruleSets = [
+        'category/java/bestpractices.xml',
+        'category/java/codestyle.xml',
+        'category/java/design.xml',
+        'category/java/errorprone.xml',
+        'category/java/performance.xml',
+        'category/java/security.xml'
+    ]
+}
+
+pmdMain {
+    reports {
+        html.required = true
+        xml.required = true
+    }
+}
+
+pmdTest {
+    reports {
+        html.required = true
+        xml.required = true
     }
 }

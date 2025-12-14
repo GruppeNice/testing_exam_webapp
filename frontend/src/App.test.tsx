@@ -1,12 +1,12 @@
-// Temporary test file to verify React is working
-import React from 'react';
+import { describe, it, expect } from 'vitest';
+import { render, screen } from '@testing-library/react';
+import App from './App';
 
-export const TestApp = () => {
-  return (
-    <div style={{ padding: '20px', backgroundColor: '#f0f0f0', minHeight: '100vh' }}>
-      <h1 style={{ color: 'blue' }}>React is Working!</h1>
-      <p>If you see this, React is rendering correctly.</p>
-    </div>
-  );
-};
+describe('App', () => {
+  it('should render without crashing', () => {
+    render(<App />);
+    // Basic smoke test - just verify the app renders
+    expect(document.body).toBeTruthy();
+  });
+});
 

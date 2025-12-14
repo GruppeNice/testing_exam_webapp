@@ -123,5 +123,40 @@ class PatientControllerTest {
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
     }
+
+    @Test
+    @DisplayName("getPatientsByWardId - Empty list - Returns NO_CONTENT")
+    void getPatientsByWardId_EmptyList_ReturnsNoContent() {
+        UUID wardId = UUID.randomUUID();
+        when(patientService.getPatientsByWardId(wardId)).thenReturn(Collections.emptyList());
+
+        ResponseEntity<List<Patient>> response = patientController.getPatientsByWardId(wardId);
+
+        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
+    }
+
+    @Test
+    @DisplayName("getPatientsByHospitalId - Should return OK with patients")
+    void getPatientsByHospitalId_ValidHospitalId_ReturnsOk() {
+        UUID hospitalId = UUID.randomUUID();
+        List<Patient> patients = Arrays.asList(testPatient);
+        when(patientService.getPatientsByHospitalId(hospitalId)).thenReturn(patients);
+
+        ResponseEntity<List<Patient>> response = patientController.getPatientsByHospitalId(hospitalId);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+    }
+
+    @Test
+    @DisplayName("getPatientsByHospitalId - Empty list - Returns NO_CONTENT")
+    void getPatientsByHospitalId_EmptyList_ReturnsNoContent() {
+        UUID hospitalId = UUID.randomUUID();
+        when(patientService.getPatientsByHospitalId(hospitalId)).thenReturn(Collections.emptyList());
+
+        ResponseEntity<List<Patient>> response = patientController.getPatientsByHospitalId(hospitalId);
+
+        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
+    }
 }
 

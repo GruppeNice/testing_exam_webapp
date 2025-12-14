@@ -1,6 +1,7 @@
 package com.testing_exam_webapp.service;
 
 import com.testing_exam_webapp.dto.AppointmentRequest;
+import com.testing_exam_webapp.exception.EntityNotFoundException;
 import com.testing_exam_webapp.model.mysql.Appointment;
 import com.testing_exam_webapp.model.mysql.Doctor;
 import com.testing_exam_webapp.model.mysql.Nurse;
@@ -271,6 +272,114 @@ class AppointmentServiceTest {
 
         assertNotNull(result);
         verify(appointmentRepository, times(1)).save(testAppointment);
+    }
+
+    @Test
+    @DisplayName("updateAppointment - Should update appointment with null patientId - Leaves patient unchanged")
+    void updateAppointment_NullPatientId_LeavesPatientUnchanged() {
+        UUID appointmentId = testAppointment.getAppointmentId();
+        testAppointment.setPatient(testPatient);
+        AppointmentRequest request = new AppointmentRequest();
+        request.setAppointmentDate(LocalDate.now().plusDays(14));
+        request.setReason("Updated reason");
+        request.setPatientId(null);
+
+        when(appointmentRepository.findById(appointmentId)).thenReturn(Optional.of(testAppointment));
+        when(appointmentRepository.save(any(Appointment.class))).thenReturn(testAppointment);
+
+        Appointment result = appointmentService.updateAppointment(appointmentId, request);
+        assertNotNull(result);
+        verify(patientRepository, never()).findById(any());
+    }
+
+    @Test
+    @DisplayName("updateAppointment - Should update appointment with null doctorId - Leaves doctor unchanged")
+    void updateAppointment_NullDoctorId_LeavesDoctorUnchanged() {
+        UUID appointmentId = testAppointment.getAppointmentId();
+        testAppointment.setDoctor(testDoctor);
+        AppointmentRequest request = new AppointmentRequest();
+        request.setAppointmentDate(LocalDate.now().plusDays(14));
+        request.setReason("Updated reason");
+        request.setDoctorId(null);
+
+        when(appointmentRepository.findById(appointmentId)).thenReturn(Optional.of(testAppointment));
+        when(appointmentRepository.save(any(Appointment.class))).thenReturn(testAppointment);
+
+        Appointment result = appointmentService.updateAppointment(appointmentId, request);
+        assertNotNull(result);
+        verify(doctorRepository, never()).findById(any());
+    }
+
+    @Test
+    @DisplayName("updateAppointment - Should update appointment with null nurseId - Leaves nurse unchanged")
+    void updateAppointment_NullNurseId_LeavesNurseUnchanged() {
+        UUID appointmentId = testAppointment.getAppointmentId();
+        testAppointment.setNurse(testNurse);
+        AppointmentRequest request = new AppointmentRequest();
+        request.setAppointmentDate(LocalDate.now().plusDays(14));
+        request.setReason("Updated reason");
+        request.setNurseId(null);
+
+        when(appointmentRepository.findById(appointmentId)).thenReturn(Optional.of(testAppointment));
+        when(appointmentRepository.save(any(Appointment.class))).thenReturn(testAppointment);
+
+        Appointment result = appointmentService.updateAppointment(appointmentId, request);
+        assertNotNull(result);
+        verify(nurseRepository, never()).findById(any());
+    }
+
+    @Test
+    @DisplayName("updateAppointment - Should throw exception when patient not found")
+    void updateAppointment_PatientNotFound_ThrowsException() {
+        UUID appointmentId = testAppointment.getAppointmentId();
+        UUID nonExistentPatientId = UUID.randomUUID();
+        AppointmentRequest request = new AppointmentRequest();
+        request.setAppointmentDate(LocalDate.now().plusDays(14));
+        request.setPatientId(nonExistentPatientId);
+
+        when(appointmentRepository.findById(appointmentId)).thenReturn(Optional.of(testAppointment));
+        when(patientRepository.findById(nonExistentPatientId)).thenReturn(Optional.empty());
+
+        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class, () -> {
+            appointmentService.updateAppointment(appointmentId, request);
+        });
+        assertEquals("Patient not found", exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("updateAppointment - Should throw exception when doctor not found")
+    void updateAppointment_DoctorNotFound_ThrowsException() {
+        UUID appointmentId = testAppointment.getAppointmentId();
+        UUID nonExistentDoctorId = UUID.randomUUID();
+        AppointmentRequest request = new AppointmentRequest();
+        request.setAppointmentDate(LocalDate.now().plusDays(14));
+        request.setDoctorId(nonExistentDoctorId);
+
+        when(appointmentRepository.findById(appointmentId)).thenReturn(Optional.of(testAppointment));
+        when(doctorRepository.findById(nonExistentDoctorId)).thenReturn(Optional.empty());
+
+        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class, () -> {
+            appointmentService.updateAppointment(appointmentId, request);
+        });
+        assertEquals("Doctor not found", exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("updateAppointment - Should throw exception when nurse not found")
+    void updateAppointment_NurseNotFound_ThrowsException() {
+        UUID appointmentId = testAppointment.getAppointmentId();
+        UUID nonExistentNurseId = UUID.randomUUID();
+        AppointmentRequest request = new AppointmentRequest();
+        request.setAppointmentDate(LocalDate.now().plusDays(14));
+        request.setNurseId(nonExistentNurseId);
+
+        when(appointmentRepository.findById(appointmentId)).thenReturn(Optional.of(testAppointment));
+        when(nurseRepository.findById(nonExistentNurseId)).thenReturn(Optional.empty());
+
+        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class, () -> {
+            appointmentService.updateAppointment(appointmentId, request);
+        });
+        assertEquals("Nurse not found", exception.getMessage());
     }
 
     @Test

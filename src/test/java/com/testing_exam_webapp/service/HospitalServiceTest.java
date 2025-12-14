@@ -11,6 +11,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -198,6 +200,20 @@ class HospitalServiceTest {
 
         assertNotNull(result);
         assertTrue(result.isEmpty());
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"Copenhagen", "Aarhus", "Odense", "Aalborg", "Esbjerg"})
+    @DisplayName("getHospitalsByCity - Equivalence Partitioning: Test multiple cities")
+    void getHospitalsByCity_MultipleCities_ReturnsHospitals(String city) {
+        List<Hospital> hospitals = Arrays.asList(testHospital);
+        when(hospitalRepository.findByCity(city)).thenReturn(hospitals);
+
+        List<Hospital> result = hospitalService.getHospitalsByCity(city);
+
+        assertNotNull(result);
+        assertEquals(1, result.size());
+        verify(hospitalRepository, times(1)).findByCity(city);
     }
 }
 

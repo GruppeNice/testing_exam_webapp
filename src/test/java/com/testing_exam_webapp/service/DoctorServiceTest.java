@@ -253,6 +253,112 @@ class DoctorServiceTest {
     }
 
     @Test
+    @DisplayName("updateDoctor - Should update doctor with null wardId - Leaves ward unchanged")
+    void updateDoctor_NullWardId_LeavesWardUnchanged() {
+        UUID doctorId = testDoctor.getDoctorId();
+        testDoctor.setWard(testWard);
+        DoctorRequest request = new DoctorRequest();
+        request.setDoctorName("Updated Doctor");
+        request.setWardId(null);
+
+        when(doctorRepository.findById(doctorId)).thenReturn(Optional.of(testDoctor));
+        when(doctorRepository.save(any(Doctor.class))).thenReturn(testDoctor);
+
+        Doctor result = doctorService.updateDoctor(doctorId, request);
+        assertNotNull(result);
+        verify(wardRepository, never()).findById(any());
+    }
+
+    @Test
+    @DisplayName("updateDoctor - Should update doctor with null hospitalId - Leaves hospital unchanged")
+    void updateDoctor_NullHospitalId_LeavesHospitalUnchanged() {
+        UUID doctorId = testDoctor.getDoctorId();
+        testDoctor.setHospital(testHospital);
+        DoctorRequest request = new DoctorRequest();
+        request.setDoctorName("Updated Doctor");
+        request.setHospitalId(null);
+
+        when(doctorRepository.findById(doctorId)).thenReturn(Optional.of(testDoctor));
+        when(doctorRepository.save(any(Doctor.class))).thenReturn(testDoctor);
+
+        Doctor result = doctorService.updateDoctor(doctorId, request);
+        assertNotNull(result);
+        verify(hospitalRepository, never()).findById(any());
+    }
+
+    @Test
+    @DisplayName("updateDoctor - Should update doctor with ward only (no hospital)")
+    void updateDoctor_WardOnly_UpdatesDoctor() {
+        UUID doctorId = testDoctor.getDoctorId();
+        DoctorRequest request = new DoctorRequest();
+        request.setDoctorName("Updated Doctor");
+        request.setWardId(testWard.getWardId());
+        request.setHospitalId(null);
+
+        when(doctorRepository.findById(doctorId)).thenReturn(Optional.of(testDoctor));
+        when(wardRepository.findById(testWard.getWardId())).thenReturn(Optional.of(testWard));
+        when(doctorRepository.save(any(Doctor.class))).thenReturn(testDoctor);
+
+        Doctor result = doctorService.updateDoctor(doctorId, request);
+        assertNotNull(result);
+        verify(hospitalRepository, never()).findById(any());
+    }
+
+    @Test
+    @DisplayName("updateDoctor - Should update doctor with hospital only (no ward)")
+    void updateDoctor_HospitalOnly_UpdatesDoctor() {
+        UUID doctorId = testDoctor.getDoctorId();
+        DoctorRequest request = new DoctorRequest();
+        request.setDoctorName("Updated Doctor");
+        request.setWardId(null);
+        request.setHospitalId(testHospital.getHospitalId());
+
+        when(doctorRepository.findById(doctorId)).thenReturn(Optional.of(testDoctor));
+        when(hospitalRepository.findById(testHospital.getHospitalId())).thenReturn(Optional.of(testHospital));
+        when(doctorRepository.save(any(Doctor.class))).thenReturn(testDoctor);
+
+        Doctor result = doctorService.updateDoctor(doctorId, request);
+        assertNotNull(result);
+        verify(wardRepository, never()).findById(any());
+    }
+
+    @Test
+    @DisplayName("updateDoctor - Should throw exception when ward not found")
+    void updateDoctor_WardNotFound_ThrowsException() {
+        UUID doctorId = testDoctor.getDoctorId();
+        UUID nonExistentWardId = UUID.randomUUID();
+        DoctorRequest request = new DoctorRequest();
+        request.setDoctorName("Updated Doctor");
+        request.setWardId(nonExistentWardId);
+
+        when(doctorRepository.findById(doctorId)).thenReturn(Optional.of(testDoctor));
+        when(wardRepository.findById(nonExistentWardId)).thenReturn(Optional.empty());
+
+        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class, () -> {
+            doctorService.updateDoctor(doctorId, request);
+        });
+        assertEquals("Ward not found", exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("updateDoctor - Should throw exception when hospital not found")
+    void updateDoctor_HospitalNotFound_ThrowsException() {
+        UUID doctorId = testDoctor.getDoctorId();
+        UUID nonExistentHospitalId = UUID.randomUUID();
+        DoctorRequest request = new DoctorRequest();
+        request.setDoctorName("Updated Doctor");
+        request.setHospitalId(nonExistentHospitalId);
+
+        when(doctorRepository.findById(doctorId)).thenReturn(Optional.of(testDoctor));
+        when(hospitalRepository.findById(nonExistentHospitalId)).thenReturn(Optional.empty());
+
+        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class, () -> {
+            doctorService.updateDoctor(doctorId, request);
+        });
+        assertEquals("Hospital not found", exception.getMessage());
+    }
+
+    @Test
     @DisplayName("deleteDoctor - Should delete doctor when valid ID provided")
     void deleteDoctor_ValidId_DeletesDoctor() {
         UUID doctorId = testDoctor.getDoctorId();

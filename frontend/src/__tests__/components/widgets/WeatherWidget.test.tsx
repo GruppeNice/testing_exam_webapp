@@ -29,7 +29,9 @@ describe('WeatherWidget', () => {
     await waitFor(() => {
       expect(screen.getByText('Weather')).toBeInTheDocument();
       expect(screen.getByText('Copenhagen, DK')).toBeInTheDocument();
-      expect(screen.getByText('16°C')).toBeInTheDocument();
+      // Temperature is split across elements, so check for the number and unit separately
+      expect(screen.getByText('16')).toBeInTheDocument();
+      expect(screen.getByText('°C')).toBeInTheDocument();
     });
   });
 

@@ -3,21 +3,12 @@ package com.testing_exam_webapp;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.data.mongo.MongoDataAutoConfiguration;
-import org.springframework.boot.autoconfigure.data.neo4j.Neo4jDataAutoConfiguration;
-import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
-import org.springframework.boot.autoconfigure.neo4j.Neo4jAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 
 import java.awt.Desktop;
 import java.net.URI;
 
-@SpringBootApplication(exclude = {
-        MongoAutoConfiguration.class,
-        MongoDataAutoConfiguration.class,
-        Neo4jAutoConfiguration.class,
-        Neo4jDataAutoConfiguration.class
-})
+@SpringBootApplication()
 public class TestingExamWebappApplication {
 
     public static void main(String[] args) {

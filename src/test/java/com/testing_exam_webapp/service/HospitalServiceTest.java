@@ -24,8 +24,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 /**
- * Comprehensive test suite for HospitalService.
- * Tests CRUD operations and query methods with boundary analysis.
+ * Tests for HospitalService.
  */
 @ExtendWith(MockitoExtension.class)
 @DisplayName("HospitalService Tests")

@@ -31,19 +31,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 /**
- * Comprehensive test suite for PatientService.
- * 
- * This test class demonstrates:
- * - Black Box Testing: Equivalence partitioning, boundary value analysis, decision table testing
- * - White Box Testing: Statement coverage, branch coverage, condition coverage, path coverage
- * 
- * Test Coverage Areas:
- * 1. getPatients() - Empty and populated lists
- * 2. getPatientById() - Valid ID, null ID, non-existent ID
- * 3. createPatient() - Various validation scenarios with equivalence partitioning and decision tables
- * 4. updatePatient() - Similar to create with additional non-existent ID case
- * 5. deletePatient() - Valid ID, non-existent ID, null ID
- * 6. Query methods - getPatientsByWardId(), getPatientsByHospitalId()
+ * Tests for PatientService.
  */
 @ExtendWith(MockitoExtension.class)
 @DisplayName("PatientService Tests")

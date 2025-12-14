@@ -23,19 +23,8 @@ import java.util.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Integration tests for PatientService with real database.
- * 
- * These tests verify the integration between PatientService and JPA repositories
- * using an in-memory H2 database. This demonstrates integration testing of
- * database operations, entity relationships, and transaction behavior.
- * 
- * Key Testing Points:
- * - Service + Repository integration with real database
- * - JPA entity relationships (ManyToOne, ManyToMany)
- * - Foreign key constraints
- * - Transaction behavior
- * - Complex business logic (ward-hospital validation)
- * - Database constraints and validations
+ * Integration tests for PatientService.
+ * Uses an in-memory H2 database to test service and repository integration.
  */
 @DataJpaTest
 @ActiveProfiles("test")

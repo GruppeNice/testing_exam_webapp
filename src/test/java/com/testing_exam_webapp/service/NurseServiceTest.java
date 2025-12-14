@@ -28,8 +28,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 /**
- * Comprehensive test suite for NurseService.
- * Similar structure to DoctorService with nurse-specific validations.
+ * Tests for NurseService.
  */
 @ExtendWith(MockitoExtension.class)
 @DisplayName("NurseService Tests")

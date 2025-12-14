@@ -26,14 +26,14 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 /**
- * Comprehensive test suite for AppointmentService.
- * Demonstrates boundary value analysis for dates and equivalence partitioning for appointment status.
+ * Tests for AppointmentService.
  */
 @ExtendWith(MockitoExtension.class)
 @DisplayName("AppointmentService Tests")
@@ -392,6 +392,96 @@ class AppointmentServiceTest {
         appointmentService.deleteAppointment(appointmentId);
 
         verify(appointmentRepository, times(1)).deleteById(appointmentId);
+    }
+
+    static Stream<Arguments> appointmentOptionalFieldsCombinations() {
+        UUID patientId = UUID.randomUUID();
+        UUID doctorId = UUID.randomUUID();
+        UUID nurseId = UUID.randomUUID();
+        return Stream.of(
+            Arguments.of(patientId, doctorId, nurseId, "All three provided"),
+            Arguments.of(patientId, doctorId, null, "Patient and doctor"),
+            Arguments.of(patientId, null, nurseId, "Patient and nurse"),
+            Arguments.of(null, doctorId, nurseId, "Doctor and nurse"),
+            Arguments.of(patientId, null, null, "Patient only"),
+            Arguments.of(null, doctorId, null, "Doctor only"),
+            Arguments.of(null, null, nurseId, "Nurse only"),
+            Arguments.of(null, null, null, "None provided")
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("appointmentOptionalFieldsCombinations")
+    @DisplayName("createAppointment - Decision Table: All combinations of optional fields")
+    void createAppointment_AllOptionalFieldCombinations_CreatesAppointment(UUID patientId, UUID doctorId, UUID nurseId, String description) {
+        AppointmentRequest request = new AppointmentRequest();
+        request.setAppointmentDate(LocalDate.now().plusDays(7));
+        request.setReason("Test");
+        request.setStatus(AppointmentStatusType.SCHEDULED);
+        request.setPatientId(patientId);
+        request.setDoctorId(doctorId);
+        request.setNurseId(nurseId);
+
+        if (patientId != null) {
+            when(patientRepository.findById(patientId)).thenReturn(Optional.of(testPatient));
+        }
+        if (doctorId != null) {
+            when(doctorRepository.findById(doctorId)).thenReturn(Optional.of(testDoctor));
+        }
+        if (nurseId != null) {
+            when(nurseRepository.findById(nurseId)).thenReturn(Optional.of(testNurse));
+        }
+        when(appointmentRepository.save(any(Appointment.class))).thenAnswer(invocation -> {
+            Appointment a = invocation.getArgument(0);
+            a.setAppointmentId(UUID.randomUUID());
+            return a;
+        });
+
+        Appointment result = appointmentService.createAppointment(request);
+        assertNotNull(result);
+        if (patientId != null) {
+            verify(patientRepository, times(1)).findById(patientId);
+        }
+        if (doctorId != null) {
+            verify(doctorRepository, times(1)).findById(doctorId);
+        }
+        if (nurseId != null) {
+            verify(nurseRepository, times(1)).findById(nurseId);
+        }
+    }
+
+    @Test
+    @DisplayName("updateAppointment - State Transition: SCHEDULED to COMPLETED")
+    void updateAppointment_ScheduledToCompleted_UpdatesStatus() {
+        UUID appointmentId = testAppointment.getAppointmentId();
+        testAppointment.setStatus(AppointmentStatusType.SCHEDULED);
+        AppointmentRequest request = new AppointmentRequest();
+        request.setAppointmentDate(LocalDate.now().plusDays(14));
+        request.setReason("Completed checkup");
+        request.setStatus(AppointmentStatusType.COMPLETED);
+
+        when(appointmentRepository.findById(appointmentId)).thenReturn(Optional.of(testAppointment));
+        when(appointmentRepository.save(any(Appointment.class))).thenReturn(testAppointment);
+
+        Appointment result = appointmentService.updateAppointment(appointmentId, request);
+        assertEquals(AppointmentStatusType.COMPLETED, result.getStatus());
+    }
+
+    @Test
+    @DisplayName("updateAppointment - State Transition: SCHEDULED to CANCELLED")
+    void updateAppointment_ScheduledToCancelled_UpdatesStatus() {
+        UUID appointmentId = testAppointment.getAppointmentId();
+        testAppointment.setStatus(AppointmentStatusType.SCHEDULED);
+        AppointmentRequest request = new AppointmentRequest();
+        request.setAppointmentDate(LocalDate.now().plusDays(14));
+        request.setReason("Cancelled by patient");
+        request.setStatus(AppointmentStatusType.CANCELLED);
+
+        when(appointmentRepository.findById(appointmentId)).thenReturn(Optional.of(testAppointment));
+        when(appointmentRepository.save(any(Appointment.class))).thenReturn(testAppointment);
+
+        Appointment result = appointmentService.updateAppointment(appointmentId, request);
+        assertEquals(AppointmentStatusType.CANCELLED, result.getStatus());
     }
 }
 

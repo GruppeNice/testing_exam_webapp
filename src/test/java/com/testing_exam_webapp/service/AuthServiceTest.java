@@ -29,8 +29,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 /**
- * Comprehensive test suite for AuthService.
- * Demonstrates equivalence partitioning for login scenarios and boundary analysis for username/password.
+ * Tests for AuthService.
  */
 @ExtendWith(MockitoExtension.class)
 @DisplayName("AuthService Tests")
@@ -152,8 +151,11 @@ class AuthServiceTest {
 
     static java.util.stream.Stream<Arguments> usernameBoundaryValues() {
         return java.util.stream.Stream.of(
+            Arguments.of("ab", "Just below minimum (2 chars)"),
             Arguments.of("abc", "Minimum length (3 chars)"),
+            Arguments.of("abcd", "Just above minimum (4 chars)"),
             Arguments.of("a".repeat(50), "Maximum length (50 chars)"),
+            Arguments.of("a".repeat(51), "Just above maximum (51 chars)"),
             Arguments.of("testuser", "Normal length")
         );
     }
@@ -181,7 +183,9 @@ class AuthServiceTest {
 
     static java.util.stream.Stream<Arguments> passwordBoundaryValues() {
         return java.util.stream.Stream.of(
+            Arguments.of("pass1", "Just below minimum (5 chars)"),
             Arguments.of("pass12", "Minimum length (6 chars)"),
+            Arguments.of("pass123", "Just above minimum (7 chars)"),
             Arguments.of("password123", "Normal length"),
             Arguments.of("verylongpassword123456", "Long password")
         );

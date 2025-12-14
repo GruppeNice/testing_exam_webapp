@@ -23,8 +23,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 /**
- * Comprehensive test suite for WardService.
- * Demonstrates boundary value analysis for maxCapacity and equivalence partitioning for WardType.
+ * Tests for WardService.
  */
 @ExtendWith(MockitoExtension.class)
 @DisplayName("WardService Tests")
@@ -95,7 +94,7 @@ class WardServiceTest {
     }
 
     @ParameterizedTest
-    @ValueSource(ints = {0, 1, 1000})
+    @ValueSource(ints = {-1, 0, 1, 2, 1000})
     @DisplayName("createWard - Boundary Analysis: Max capacity boundary values")
     void createWard_MaxCapacityBoundaryValues_CreatesWard(int capacity) {
         WardRequest request = new WardRequest();

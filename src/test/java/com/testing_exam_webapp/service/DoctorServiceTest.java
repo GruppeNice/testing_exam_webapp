@@ -28,11 +28,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 /**
- * Comprehensive test suite for DoctorService.
- * 
- * Demonstrates:
- * - Black Box Testing: Equivalence partitioning (speciality types), decision table testing (ward-hospital validation)
- * - White Box Testing: Branch coverage, condition coverage for validation logic
+ * Tests for DoctorService.
  */
 @ExtendWith(MockitoExtension.class)
 @DisplayName("DoctorService Tests")

@@ -1,32 +1,49 @@
 package com.testing_exam_webapp.service;
 
 import com.testing_exam_webapp.dto.WeatherDto;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-/**
- * WeatherService Tests
- * 
- * NOTE: These tests verify the default fallback behavior when API calls fail.
- * Full integration tests with mocked WebClient require the spring-boot-starter-webflux
- * dependency to be downloaded by Gradle. Refresh your Gradle project in your IDE
- * if you see "WebClient cannot be resolved" errors.
- */
 @ExtendWith(MockitoExtension.class)
 @DisplayName("WeatherService Tests")
 class WeatherServiceTest {
 
     private WeatherService weatherService;
 
-    @org.junit.jupiter.api.BeforeEach
+    @BeforeEach
     void setUp() {
-        // Create a real WeatherService instance with test values
-        // This will use a real WebClient, but will fall back to default weather on errors
         weatherService = new WeatherService("https://api.openweathermap.org/data/2.5/weather", "test-api-key");
+    }
+
+    static Stream<Arguments> cityNameVariations() {
+        return Stream.of(
+            Arguments.of("Copenhagen", "Copenhagen"),
+            Arguments.of("copenhagen", "Copenhagen"),
+            Arguments.of("København", "Copenhagen"),
+            Arguments.of("københavn", "Copenhagen"),
+            Arguments.of("kobenhavn", "Copenhagen"),
+            Arguments.of("KBH", "Copenhagen"),
+            Arguments.of("kbh", "Copenhagen")
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("cityNameVariations")
+    @DisplayName("getWeatherByCity - Equivalence Partitioning: City name normalization")
+    void getWeatherByCity_CityNameVariations_NormalizesCorrectly(String inputCity, String expectedCity) {
+        WeatherDto result = weatherService.getWeatherByCity(inputCity);
+        assertNotNull(result);
+        assertEquals(expectedCity, result.getCity());
     }
 
     @Test

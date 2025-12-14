@@ -19,17 +19,7 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 
 /**
  * Integration tests for WeatherService.
- * 
- * These tests verify the integration between WeatherService and the external OpenWeatherMap API
- * using MockRestServiceServer to mock HTTP responses. This demonstrates integration testing
- * of external API dependencies without making actual HTTP calls.
- * 
- * Key Testing Points:
- * - HTTP request construction (URL, parameters, encoding)
- * - Response mapping from JSON to WeatherDto
- * - Error handling (404, 401, network errors)
- * - Fallback behavior when API fails
- * - City name normalization
+ * Uses MockRestServiceServer to mock HTTP responses from the OpenWeatherMap API.
  */
 @DisplayName("WeatherService Integration Tests")
 class WeatherServiceIntegrationTest {

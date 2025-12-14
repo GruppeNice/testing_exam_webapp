@@ -18,17 +18,7 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 
 /**
  * Integration tests for TimeService.
- * 
- * These tests verify the integration between TimeService and the external WorldTimeAPI
- * using MockRestServiceServer to mock HTTP responses. This demonstrates integration testing
- * of external API dependencies without making actual HTTP calls.
- * 
- * Key Testing Points:
- * - HTTP request construction with timezone parameter
- * - Response mapping from JSON to TimeDto
- * - Error handling (404, network errors)
- * - Fallback behavior when API fails
- * - Default timezone handling
+ * Uses MockRestServiceServer to mock HTTP responses from the WorldTimeAPI.
  */
 @DisplayName("TimeService Integration Tests")
 class TimeServiceIntegrationTest {

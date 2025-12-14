@@ -26,19 +26,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 /**
- * WHITE BOX TESTING - PatientService
- * 
- * This test class explicitly tests internal implementation details:
- * - Branch Coverage: All if/else branches
- * - Condition Coverage: All compound conditions (AND, OR)
- * - Path Coverage: All possible execution paths
- * - Statement Coverage: Every statement executed
- * 
- * White Box Testing Techniques Demonstrated:
- * 1. Branch Coverage: Tests every branch in conditional statements
- * 2. Condition Coverage: Tests all combinations of compound conditions
- * 3. Path Coverage: Tests all possible execution paths through the code
- * 4. Statement Coverage: Ensures every line of code is executed
+ * White box tests for PatientService - tests internal implementation details.
  */
 @ExtendWith(MockitoExtension.class)
 @DisplayName("PatientService - White Box Tests")
@@ -70,15 +58,10 @@ class PatientServiceWhiteBoxTest {
     // ==================== BRANCH COVERAGE TESTS ====================
     // Testing all branches in createPatient() method
 
-    /**
-     * WHITE BOX: Branch Coverage Test
-     * Branch: if (request.getDiagnosisIds() != null) - FALSE branch
-     * Tests the path where diagnosisIds is null (branch not taken)
-     */
     @Test
     @DisplayName("createPatient - Branch Coverage: diagnosisIds null branch (FALSE)")
     void createPatient_DiagnosisIdsNull_BranchNotTaken() {
-        // Arrange - Branch: if (request.getDiagnosisIds() != null) -> FALSE
+        // Arrange - Testing branch where diagnosisIds is null
         PatientRequest request = new PatientRequest();
         request.setPatientName("John Doe");
         request.setDateOfBirth(java.time.LocalDate.of(1990, 1, 1));
@@ -100,15 +83,10 @@ class PatientServiceWhiteBoxTest {
         verify(diagnosisRepository, never()).findById(any()); // Verify diagnosis branch not executed
     }
 
-    /**
-     * WHITE BOX: Branch Coverage Test
-     * Branch: if (request.getDiagnosisIds() != null) - TRUE branch
-     * Tests the path where diagnosisIds is not null (branch taken)
-     */
     @Test
     @DisplayName("createPatient - Branch Coverage: diagnosisIds not null branch (TRUE)")
     void createPatient_DiagnosisIdsNotNull_BranchTaken() {
-        // Arrange - Branch: if (request.getDiagnosisIds() != null) -> TRUE
+        // Arrange - Testing branch where diagnosisIds is not null
         PatientRequest request = new PatientRequest();
         request.setPatientName("John Doe");
         request.setDateOfBirth(java.time.LocalDate.of(1990, 1, 1));
@@ -133,15 +111,10 @@ class PatientServiceWhiteBoxTest {
         verify(diagnosisRepository, times(1)).findById(testDiagnosis.getDiagnosisId()); // Verify branch executed
     }
 
-    /**
-     * WHITE BOX: Branch Coverage Test
-     * Branch: if (wardId != null) - FALSE branch
-     * Tests the path where wardId is null
-     */
     @Test
     @DisplayName("createPatient - Branch Coverage: wardId null branch (FALSE)")
     void createPatient_WardIdNull_BranchNotTaken() {
-        // Arrange - Branch: if (wardId != null) -> FALSE
+        // Arrange - Testing branch where wardId is null
         PatientRequest request = new PatientRequest();
         request.setPatientName("John Doe");
         request.setDateOfBirth(java.time.LocalDate.of(1990, 1, 1));
@@ -163,15 +136,10 @@ class PatientServiceWhiteBoxTest {
         verify(wardRepository, never()).findById(any()); // Verify ward branch not executed
     }
 
-    /**
-     * WHITE BOX: Branch Coverage Test
-     * Branch: if (wardId != null) - TRUE branch
-     * Tests the path where wardId is not null
-     */
     @Test
     @DisplayName("createPatient - Branch Coverage: wardId not null branch (TRUE)")
     void createPatient_WardIdNotNull_BranchTaken() {
-        // Arrange - Branch: if (wardId != null) -> TRUE
+        // Arrange - Testing branch where wardId is not null
         PatientRequest request = new PatientRequest();
         request.setPatientName("John Doe");
         request.setDateOfBirth(java.time.LocalDate.of(1990, 1, 1));
@@ -195,14 +163,10 @@ class PatientServiceWhiteBoxTest {
         verify(wardRepository, times(1)).findById(testWard.getWardId()); // Verify branch executed
     }
 
-    /**
-     * WHITE BOX: Branch Coverage Test
-     * Branch: if (hospitalId != null) - FALSE branch
-     */
     @Test
     @DisplayName("createPatient - Branch Coverage: hospitalId null branch (FALSE)")
     void createPatient_HospitalIdNull_BranchNotTaken() {
-        // Arrange - Branch: if (hospitalId != null) -> FALSE
+        // Arrange - Testing branch where hospitalId is null
         PatientRequest request = new PatientRequest();
         request.setPatientName("John Doe");
         request.setDateOfBirth(java.time.LocalDate.of(1990, 1, 1));
@@ -224,14 +188,10 @@ class PatientServiceWhiteBoxTest {
         verify(hospitalRepository, never()).findById(any()); // Verify branch not executed
     }
 
-    /**
-     * WHITE BOX: Branch Coverage Test
-     * Branch: if (hospitalId != null) - TRUE branch
-     */
     @Test
     @DisplayName("createPatient - Branch Coverage: hospitalId not null branch (TRUE)")
     void createPatient_HospitalIdNotNull_BranchTaken() {
-        // Arrange - Branch: if (hospitalId != null) -> TRUE
+        // Arrange - Testing branch where hospitalId is not null
         PatientRequest request = new PatientRequest();
         request.setPatientName("John Doe");
         request.setDateOfBirth(java.time.LocalDate.of(1990, 1, 1));
@@ -259,14 +219,14 @@ class PatientServiceWhiteBoxTest {
     // Testing compound conditions: (ward != null && hospital != null)
 
     /**
-     * WHITE BOX: Condition Coverage Test
+     * Condition Coverage Test
      * Condition: (ward != null && hospital != null)
      * Test Case: ward = null, hospital = null -> (FALSE && FALSE) = FALSE
      */
     @Test
     @DisplayName("createPatient - Condition Coverage: ward null AND hospital null (FALSE && FALSE)")
     void createPatient_WardNullAndHospitalNull_ConditionFalse() {
-        // Arrange - Condition: (ward != null && hospital != null) -> (FALSE && FALSE) = FALSE
+        // Arrange - Testing condition where both ward and hospital are null (evaluates to FALSE)
         PatientRequest request = new PatientRequest();
         request.setPatientName("John Doe");
         request.setDateOfBirth(java.time.LocalDate.of(1990, 1, 1));
@@ -293,14 +253,14 @@ class PatientServiceWhiteBoxTest {
     }
 
     /**
-     * WHITE BOX: Condition Coverage Test
+     * Condition Coverage Test
      * Condition: (ward != null && hospital != null)
      * Test Case: ward = not null, hospital = null -> (TRUE && FALSE) = FALSE
      */
     @Test
     @DisplayName("createPatient - Condition Coverage: ward not null AND hospital null (TRUE && FALSE)")
     void createPatient_WardNotNullAndHospitalNull_ConditionFalse() {
-        // Arrange - Condition: (ward != null && hospital != null) -> (TRUE && FALSE) = FALSE
+        // Arrange - Testing condition where ward is not null but hospital is null (evaluates to FALSE)
         PatientRequest request = new PatientRequest();
         request.setPatientName("John Doe");
         request.setDateOfBirth(java.time.LocalDate.of(1990, 1, 1));
@@ -327,14 +287,14 @@ class PatientServiceWhiteBoxTest {
     }
 
     /**
-     * WHITE BOX: Condition Coverage Test
+     * Condition Coverage Test
      * Condition: (ward != null && hospital != null)
      * Test Case: ward = null, hospital = not null -> (FALSE && TRUE) = FALSE
      */
     @Test
     @DisplayName("createPatient - Condition Coverage: ward null AND hospital not null (FALSE && TRUE)")
     void createPatient_WardNullAndHospitalNotNull_ConditionFalse() {
-        // Arrange - Condition: (ward != null && hospital != null) -> (FALSE && TRUE) = FALSE
+        // Arrange - Testing condition where ward is null but hospital is not null (evaluates to FALSE)
         PatientRequest request = new PatientRequest();
         request.setPatientName("John Doe");
         request.setDateOfBirth(java.time.LocalDate.of(1990, 1, 1));
@@ -360,7 +320,7 @@ class PatientServiceWhiteBoxTest {
     }
 
     /**
-     * WHITE BOX: Condition Coverage Test
+     * Condition Coverage Test
      * Condition: (ward != null && hospital != null)
      * Test Case: ward = not null, hospital = not null -> (TRUE && TRUE) = TRUE
      * Sub-condition: ward.getHospitals() != null -> TRUE
@@ -369,9 +329,8 @@ class PatientServiceWhiteBoxTest {
     @Test
     @DisplayName("createPatient - Condition Coverage: ward not null AND hospital not null, ward belongs (TRUE && TRUE, validation TRUE)")
     void createPatient_WardNotNullAndHospitalNotNull_WardBelongs_ConditionTrue() {
-        // Arrange - Condition: (ward != null && hospital != null) -> (TRUE && TRUE) = TRUE
-        // Sub-condition: ward.getHospitals() != null -> TRUE
-        // Sub-condition: anyMatch returns TRUE (ward belongs to hospital)
+        // Arrange - Testing condition where both ward and hospital are not null (evaluates to TRUE)
+        // Ward has hospitals set and belongs to the selected hospital
         TestDataBuilder.associateWardWithHospital(testWard, testHospital);
         
         PatientRequest request = new PatientRequest();
@@ -402,15 +361,15 @@ class PatientServiceWhiteBoxTest {
     }
 
     /**
-     * WHITE BOX: Condition Coverage Test
+     * Condition Coverage Test
      * Condition: (ward != null && hospital != null) -> TRUE
      * Sub-condition: ward.getHospitals() != null -> FALSE (null hospitals set)
      */
     @Test
     @DisplayName("createPatient - Condition Coverage: ward hospitals null (sub-condition FALSE)")
     void createPatient_WardHospitalsNull_SubConditionFalse() {
-        // Arrange - Condition: (ward != null && hospital != null) -> TRUE
-        // Sub-condition: ward.getHospitals() != null -> FALSE (hospitals is null)
+        // Arrange - Testing condition where both ward and hospital are not null
+        // Ward has null hospitals set (sub-condition evaluates to FALSE)
         testWard.setHospitals(null); // Explicitly set to null
         
         PatientRequest request = new PatientRequest();
@@ -433,7 +392,7 @@ class PatientServiceWhiteBoxTest {
     }
 
     /**
-     * WHITE BOX: Condition Coverage Test
+     * Condition Coverage Test
      * Condition: (ward != null && hospital != null) -> TRUE
      * Sub-condition: ward.getHospitals() != null -> TRUE
      * Sub-condition: stream().anyMatch(...) -> FALSE (ward doesn't belong to hospital)
@@ -441,9 +400,8 @@ class PatientServiceWhiteBoxTest {
     @Test
     @DisplayName("createPatient - Condition Coverage: ward doesn't belong to hospital (anyMatch FALSE)")
     void createPatient_WardDoesNotBelongToHospital_AnyMatchFalse() {
-        // Arrange - Condition: (ward != null && hospital != null) -> TRUE
-        // Sub-condition: ward.getHospitals() != null -> TRUE
-        // Sub-condition: anyMatch returns FALSE (ward doesn't belong to hospital)
+        // Arrange - Testing condition where both ward and hospital are not null
+        // Ward has hospitals set but doesn't belong to the selected hospital (anyMatch returns FALSE)
         // Ward has hospitals, but not the one we're checking
         Hospital otherHospital = TestDataBuilder.createHospital();
         otherHospital.setHospitalName("Other Hospital");
@@ -473,7 +431,7 @@ class PatientServiceWhiteBoxTest {
     // Testing all possible execution paths through createPatient()
 
     /**
-     * WHITE BOX: Path Coverage Test
+     * Path Coverage Test
      * Path 1: No diagnosis, no ward, no hospital
      * Executes: diagnosisIds null branch, wardId null branch, hospitalId null branch, validation branch not taken
      */
@@ -507,7 +465,7 @@ class PatientServiceWhiteBoxTest {
     }
 
     /**
-     * WHITE BOX: Path Coverage Test
+     * Path Coverage Test
      * Path 2: With diagnosis, no ward, no hospital
      */
     @Test
@@ -542,7 +500,7 @@ class PatientServiceWhiteBoxTest {
     }
 
     /**
-     * WHITE BOX: Path Coverage Test
+     * Path Coverage Test
      * Path 3: No diagnosis, with ward, no hospital
      */
     @Test
@@ -577,7 +535,7 @@ class PatientServiceWhiteBoxTest {
     }
 
     /**
-     * WHITE BOX: Path Coverage Test
+     * Path Coverage Test
      * Path 4: No diagnosis, no ward, with hospital
      */
     @Test
@@ -612,7 +570,7 @@ class PatientServiceWhiteBoxTest {
     }
 
     /**
-     * WHITE BOX: Path Coverage Test
+     * Path Coverage Test
      * Path 5: No diagnosis, with ward, with hospital (ward belongs) - validation passes
      */
     @Test
@@ -650,7 +608,7 @@ class PatientServiceWhiteBoxTest {
     }
 
     /**
-     * WHITE BOX: Path Coverage Test
+     * Path Coverage Test
      * Path 6: No diagnosis, with ward, with hospital (ward doesn't belong) - validation fails
      */
     @Test
@@ -680,7 +638,7 @@ class PatientServiceWhiteBoxTest {
     }
 
     /**
-     * WHITE BOX: Path Coverage Test
+     * Path Coverage Test
      * Path 7: With diagnosis, with ward, with hospital (ward belongs) - all branches taken
      */
     @Test
@@ -726,7 +684,7 @@ class PatientServiceWhiteBoxTest {
     // Ensuring every statement is executed
 
     /**
-     * WHITE BOX: Statement Coverage Test
+     * Statement Coverage Test
      * Tests that the for-loop in diagnosis processing executes (statement coverage)
      */
     @Test
